@@ -20,4 +20,9 @@ class NetworkManager: ObservableObject {
         }
         networkMonitor.start(queue: networkMonitorQueue)
     }
+    
+    static func getWeatherData(from: URL) {
+        
+    }
+    
 }

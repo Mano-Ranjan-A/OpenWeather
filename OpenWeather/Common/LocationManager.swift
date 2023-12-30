@@ -12,7 +12,7 @@ class LocationManager: NSObject, ObservableObject {
     private let locationManager = CLLocationManager()
     
     @Published var location: CLLocationCoordinate2D?
-    @Published var isLocationAuthorised: CLAuthorizationStatus = .notDetermined
+    @Published var isLocationAuthorised: Bool = false
     
     override init() {
         super.init()
@@ -28,7 +28,14 @@ class LocationManager: NSObject, ObservableObject {
 extension LocationManager: CLLocationManagerDelegate {
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        self.isLocationAuthorised = manager.authorizationStatus
+        switch manager.authorizationStatus {
+        case .notDetermined, .restricted, .denied:
+            self.isLocationAuthorised = false
+        case .authorizedWhenInUse, .authorizedAlways:
+            self.isLocationAuthorised = true
+        @unknown default:
+            self.isLocationAuthorised = false
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

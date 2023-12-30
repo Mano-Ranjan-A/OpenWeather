@@ -11,13 +11,16 @@ struct PicALocView: View {
     
     @EnvironmentObject var networkManager: NetworkManager
     @Binding var reload: Bool
-    @State var showWeatherView: Bool = true
+    
+    @State var showWeatherView = false
+    @State var showWeatherForcast = false
     @State var city: String = ""
     @State var isPresented = false
+    
     var body: some View {
         VStack {
             // Search field
-            TextField("Enter city name", text: $city)
+            TextField("Enter city name or zip code", text: $city, onCommit: performWeatherSearch)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
                 .keyboardType(.webSearch)
@@ -27,12 +30,22 @@ struct PicALocView: View {
             
             Spacer()
             
-            if showWeatherView {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 5) {
-                        TodayWeatherView(cityName: "Chennai", todaysDesc: "Mostly Cloudy today",showLocationIco: false)
-                        ForcastView(todaysDesc: "Mostly Cloudy")
+            if showWeatherForcast {
+                if networkManager.isNetworkAvailble {
+                    // TODO: Doo API call
+                    let apiSuccess = true
+                    if apiSuccess {
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 5) {
+                                TodayWeatherView(cityName: "Chennai", todaysDesc: "Mostly Cloudy today",showLocationIco: false)
+                                ForcastView(todaysDesc: "Mostly Cloudy")
+                            }
+                        }
+                    } else {
+                        ErrorView(errorType: .apiError)
                     }
+                } else {
+                    ErrorView(errorType: .networkError)
                 }
             } else {
                 VStack {
@@ -46,10 +59,10 @@ struct PicALocView: View {
                 .padding()
                 Spacer()
             }
+            
         }
         .onChange(of: reload, perform: { _ in
             if isPresented {
-                print("hi")
                 showWeatherView.toggle()
             }
         })
@@ -62,6 +75,10 @@ struct PicALocView: View {
         .onDisappear() {
             self.isPresented = false
         }
+    }
+    
+    func performWeatherSearch() {
+        self.showWeatherForcast = true
     }
 }
 
