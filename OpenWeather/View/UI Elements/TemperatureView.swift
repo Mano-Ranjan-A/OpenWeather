@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct TemperatureViewStyle {
+    
     var fontStyle: Font = .title3
-    var weatherImgWidth: CGFloat = 40
-    var weatherImgHeight: CGFloat = 40
+    var weatherIcoScale: CGFloat = 1
     var weatherIco: String
     var weatherColor: Color
 }
 
 struct TemperatureView: View {
+    
+    var icoSize: CGFloat {
+        return style.weatherIcoScale * 40
+    }
+    
     var temperture: String
     var style: TemperatureViewStyle
     var body: some View {
@@ -26,7 +31,9 @@ struct TemperatureView: View {
             Image(systemName: style.weatherIco)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: style.weatherImgWidth, height: style.weatherImgHeight, alignment: .center)
+                .frame(width: icoSize ,
+                       height: icoSize,
+                       alignment: .center)
                 .foregroundColor(style.weatherColor)
         }
     }

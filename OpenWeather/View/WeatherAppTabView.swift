@@ -13,12 +13,12 @@ struct WeatherAppTabView: View {
         NavigationView {
             ZStack {
                 TabView {
-                    WeatherView(reload: $reload)
+                    WeatherView()
                         .tabItem {
                             Label("Weather", systemImage: "cloud.sun.fill")
                         }
                     
-                    PicALocView(reload: $reload)
+                    PicALocView()
                         .tabItem {
                             Label("Search", systemImage: "location.fill")
                     }

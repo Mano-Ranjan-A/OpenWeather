@@ -9,11 +9,9 @@ import SwiftUI
 
 struct WeatherView: View {
     @EnvironmentObject var networkManager: NetworkManager
+    @EnvironmentObject var viewModel: WeatherViewModel
     @StateObject var locationManager = LocationManager()
     
-    @Binding var reload: Bool
-    @State var showWeatherView = false
-    @State var isPresented = false
     var body: some View {
         VStack {
             if networkManager.isNetworkAvailble && locationManager.isLocationAuthorised {
@@ -21,8 +19,11 @@ struct WeatherView: View {
                 let apiSuccess = true
                 if apiSuccess {
                     List {
-                        TodayWeatherView(cityName: "Chennai", todaysDesc: "Mostly Cloudy today", isLatestLocation: true)
-                        ForcastView(todaysDesc: "Mostly Cloudy")
+                        guard let todayWeather = viewModel.todayWeather, let forcast = viewModel.forcastWeather else {
+                                ErrorView(errorType: .apiError)
+                        }
+                        TodayWeatherView()
+                        ForcastView()
                     }
                 } else {
                     ErrorView(errorType: .apiError)
@@ -33,25 +34,13 @@ struct WeatherView: View {
                 ErrorView(errorType: .networkError)
             }
         }
-        .onChange(of: reload, perform: { _ in
-            if isPresented {
-                print("hi")
-                showWeatherView.toggle()
-            }
-        })
-        .onAppear() {
-            locationManager.requestLocation()
-            self.isPresented = true
-        }
-        .onDisappear() {
-            self.isPresented = false
-        }
     }
 }
 
 struct WeatherView_Previews: PreviewProvider {
     static var previews: some View {
-        WeatherView(reload: .constant(true))
+        WeatherView()
             .environmentObject(NetworkManager())
+            .environmentObject(WeatherViewModel())
     }
 }

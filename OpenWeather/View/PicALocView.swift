@@ -10,17 +10,15 @@ import SwiftUI
 struct PicALocView: View {
     
     @EnvironmentObject var networkManager: NetworkManager
-    @Binding var reload: Bool
+    @EnvironmentObject var viewModel: WeatherViewModel
     
-    @State var showWeatherView = false
     @State var showWeatherForcast = false
-    @State var city: String = ""
-    @State var isPresented = false
+    @State var cityName: String = "" // setting city name as empty by default
     
     var body: some View {
         VStack {
             // Search field
-            TextField("Enter city name or zip code", text: $city, onCommit: performWeatherSearch)
+            TextField("Enter city name", text: $cityName, onCommit: performWeatherSearch)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
                 .keyboardType(.webSearch)
@@ -34,8 +32,8 @@ struct PicALocView: View {
                     let apiSuccess = true
                     if apiSuccess {
                         List {
-                            TodayWeatherView(cityName: "Chennai", todaysDesc: "Mostly Cloudy today",showLocationIco: false)
-                            ForcastView(todaysDesc: "Mostly Cloudy")
+                            TodayWeatherView()
+                            ForcastView()
                         }
                     } else {
                         ErrorView(errorType: .apiError)
@@ -57,20 +55,6 @@ struct PicALocView: View {
             }
             
         }
-        .onChange(of: reload, perform: { _ in
-            if isPresented {
-                showWeatherView.toggle()
-            }
-        })
-        .onAppear() {
-            if !networkManager.isNetworkAvailble {
-            showWeatherView = false
-        }
-            self.isPresented = true
-        }
-        .onDisappear() {
-            self.isPresented = false
-        }
     }
     
     func performWeatherSearch() {
@@ -80,7 +64,8 @@ struct PicALocView: View {
 
 struct PicALocView_Previews: PreviewProvider {
     static var previews: some View {
-        PicALocView(reload: .constant(false))
+        PicALocView()
             .environmentObject(NetworkManager())
+            .environmentObject(WeatherViewModel())
     }
 }

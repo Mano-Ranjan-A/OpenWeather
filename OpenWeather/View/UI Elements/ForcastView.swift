@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct ForcastView: View {
-    
-    var todaysDesc: String
+    @State var forcastList: [ForcastList]
     
     var body: some View {
         
@@ -17,24 +16,30 @@ struct ForcastView: View {
             Text("Weather forecast for next 5 days")
                 .font(.title2)
                 .fontWeight(.medium)
-            ForEach(0..<5) { _ in
+            ForEach(forcastList) { perDayForcast in
                 HStack(spacing: 25) {
                     VStack(alignment: .leading, spacing: 5) {
-                        Text("Tomorrow")
+                        Text(getDayFrom(time: perDayForcast.dt))
                             .font(.title3)
-                        Text(todaysDesc)
+                        Text(perDayForcast.weather.first.description)
                             .font(.caption)
                     }
-                    TemperatureView(temperture: "28°C ~ 32°C", style: TemperatureViewStyle(weatherIco: "cloud.fill", weatherColor: .blue))
+                    TemperatureView(temperture: "\(perDayForcast.temperature.minTemp)°C ~ \(perDayForcast.temperature.maxTemp)C",
+                                    style: TemperatureViewStyle(weatherIco: "cloud.fill",
+                                                                weatherColor: .blue))
                 }
             }
         }
+    }
+    
+    func getDayFrom(time: Int) -> String {
+        return "Tomorrow"
     }
 }
 
 
 struct ForcastView_Previews: PreviewProvider {
     static var previews: some View {
-        ForcastView(todaysDesc: "Mostly Coludy")
+        ForcastView()
     }
 }

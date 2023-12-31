@@ -8,32 +8,34 @@
 import SwiftUI
 
 struct TodayWeatherView: View {
-    var cityName: String
-    var todaysDesc: String
-    var showLocationIco: Bool = true
+    @State var todayWeather: TodayWeatherModel
     @State var isLatestLocation: Bool = false
     
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(cityName)
+                Text(todayWeather.cityName)
                     .font(.title)
                     .fontWeight(.semibold)
-                if showLocationIco {
-                    Image(systemName: isLatestLocation ? "location.fill" : "location.slash.fill")
-                }
+                Image(systemName: isLatestLocation ? "location.fill" : "location.slash.fill")
             }
             
             Text("Todays weather")
             
-            TemperatureView(temperture: "28°C", style: TemperatureViewStyle(fontStyle: .system(size: 60), weatherImgWidth: 80, weatherImgHeight: 80, weatherIco: "sun.max.fill", weatherColor: .blue))
+            let ico = "cloud" //viewModel.getWeatherIcoName(for: todayWeather.weather.first?.id)
+            TemperatureView(temperture: "\(todayWeather.temperature.avgTemp)",
+                            style: TemperatureViewStyle(fontStyle: .system(size: 60),
+                                                        weatherIcoScale: 2,
+                                                        weatherIco: ico,
+                                                        weatherColor: .blue))
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10))
+            
             HStack {
-                Text("Feels like 32°C")
+                Text("Feels like \(todayWeather.temperature.feelLike)°C")
                 Spacer()
-                Text("28°C ~ 34°C")
+                Text("\(todayWeather.temperature.minTemp)°C ~ \(todayWeather.temperature.maxTemp)°C")
             }
-            Text(todaysDesc)
+            Text(todayWeather.weather.description)
                 .font(.callout)
                 .padding(EdgeInsets(top: 3, leading: 0, bottom: 0, trailing: 0))
         }
@@ -42,6 +44,6 @@ struct TodayWeatherView: View {
 
 struct WeatherDataView_Previews: PreviewProvider {
     static var previews: some View {
-        TodayWeatherView(cityName: "Chennai", todaysDesc: "Mostly Cloudy today")
+        TodayWeatherView(todayWeather: WeatherViewModel.testData, isLatestLocation: true)
     }
 }
