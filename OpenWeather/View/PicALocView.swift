@@ -16,24 +16,26 @@ struct PicALocView: View {
     @State var cityName: String = "" // setting city name as empty by default
     
     var body: some View {
-        VStack {
+        VStack() {
             // Search field
             TextField("Enter city name", text: $cityName, onCommit: performWeatherSearch)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .textFieldStyle(.roundedBorder)
                 .padding()
-                .keyboardType(.webSearch)
-                .onAppear() {
+                .tint(.accentColor)
+                .onAppear {
                     UITextField.appearance().clearButtonMode = .whileEditing
                 }
-            
             if !showWeatherForcast {
                 if networkManager.isNetworkAvailble {
                     // TODO: Doo API call
                     let apiSuccess = true
                     if apiSuccess {
                         List {
-                            TodayWeatherView()
-                            ForcastView()
+                            TodayWeatherView(todayWeather: WeatherViewModel.todayWeatherPreviewData)
+                            ForcastView(forcastList: WeatherViewModel.forcastPreviewData)
+                        }
+                        .refreshable {
+                            print("refresh")
                         }
                     } else {
                         ErrorView(errorType: .apiError)
@@ -51,9 +53,8 @@ struct PicALocView: View {
                         .multilineTextAlignment(.center)
                 }
                 .padding()
-                Spacer()
             }
-            
+            Spacer()
         }
     }
     
@@ -67,5 +68,6 @@ struct PicALocView_Previews: PreviewProvider {
         PicALocView()
             .environmentObject(NetworkManager())
             .environmentObject(WeatherViewModel())
+            .previewDevice(PreviewDevice(rawValue: "iPhone 12"))
     }
 }

@@ -21,7 +21,7 @@ struct ForcastView: View {
                     VStack(alignment: .leading, spacing: 5) {
                         Text(getDayFrom(time: perDayForcast.dt))
                             .font(.title3)
-                        Text(perDayForcast.weather.first.description)
+                        Text(perDayForcast.weather.first?.description ?? "")
                             .font(.caption)
                     }
                     TemperatureView(temperture: "\(perDayForcast.temperature.minTemp)°C ~ \(perDayForcast.temperature.maxTemp)C",
@@ -40,6 +40,6 @@ struct ForcastView: View {
 
 struct ForcastView_Previews: PreviewProvider {
     static var previews: some View {
-        ForcastView()
+        ForcastView(forcastList: WeatherViewModel.forcastPreviewData)
     }
 }

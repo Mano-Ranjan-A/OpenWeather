@@ -14,19 +14,30 @@ struct WeatherView: View {
     
     var body: some View {
         VStack {
-            if networkManager.isNetworkAvailble && locationManager.isLocationAuthorised {
+            if networkManager.isNetworkAvailble && locationManager.isLocationAuthorised && locationManager.location != nil {
                 // TODO: Call weather API
-                let apiSuccess = true
-                if apiSuccess {
+                if let todayWeather = viewModel.todaysWeather {
                     List {
-                        guard let todayWeather = viewModel.todayWeather, let forcast = viewModel.forcastWeather else {
-                                ErrorView(errorType: .apiError)
+                        TodayWeatherView(todayWeather: todayWeather, showLocationIco: true)
+                        ForcastView(forcastList: WeatherViewModel.forcastPreviewData)
+                            
+                    }
+                    .refreshable {
+                        Task {
+                            print(locationManager.location)
+                            await viewModel.fetchWeatherDataFor(lat: 44.34, //locationManager.location?.latitude,
+                                                                lon: 10.99) //locationManager.location?.longitude)
                         }
-                        TodayWeatherView()
-                        ForcastView()
                     }
                 } else {
                     ErrorView(errorType: .apiError)
+                        .onAppear() {
+                            Task {
+                                print(locationManager.location)
+                                await viewModel.fetchWeatherDataFor(lat: locationManager.location?.latitude,
+                                                                    lon: locationManager.location?.longitude)
+                            }
+                        }
                 }
             } else if networkManager.isNetworkAvailble && !locationManager.isLocationAuthorised {
                 ErrorView(errorType: .noLocationAccess)
@@ -34,6 +45,7 @@ struct WeatherView: View {
                 ErrorView(errorType: .networkError)
             }
         }
+        
     }
 }
 
@@ -42,5 +54,6 @@ struct WeatherView_Previews: PreviewProvider {
         WeatherView()
             .environmentObject(NetworkManager())
             .environmentObject(WeatherViewModel())
+            .previewDevice(PreviewDevice(rawValue: "iPhone 12"))
     }
 }

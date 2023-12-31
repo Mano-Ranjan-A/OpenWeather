@@ -11,13 +11,16 @@ struct TodayWeatherView: View {
     @State var todayWeather: TodayWeatherModel
     @State var isLatestLocation: Bool = false
     
+    var showLocationIco = false
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
                 Text(todayWeather.cityName)
                     .font(.title)
                     .fontWeight(.semibold)
-                Image(systemName: isLatestLocation ? "location.fill" : "location.slash.fill")
+                if showLocationIco {
+                    Image(systemName: isLatestLocation ? "location.fill" : "location")
+                }
             }
             
             Text("Todays weather")
@@ -35,7 +38,7 @@ struct TodayWeatherView: View {
                 Spacer()
                 Text("\(todayWeather.temperature.minTemp)°C ~ \(todayWeather.temperature.maxTemp)°C")
             }
-            Text(todayWeather.weather.description)
+            Text(todayWeather.weather.first?.description ?? "")
                 .font(.callout)
                 .padding(EdgeInsets(top: 3, leading: 0, bottom: 0, trailing: 0))
         }
@@ -44,6 +47,6 @@ struct TodayWeatherView: View {
 
 struct WeatherDataView_Previews: PreviewProvider {
     static var previews: some View {
-        TodayWeatherView(todayWeather: WeatherViewModel.testData, isLatestLocation: true)
+        TodayWeatherView(todayWeather: WeatherViewModel.todayWeatherPreviewData, isLatestLocation: true)
     }
 }

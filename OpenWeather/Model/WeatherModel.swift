@@ -33,7 +33,8 @@ struct ForcastWeatherModel: Codable {
 }
 
 // MARK: - ForcastList
-struct ForcastList: Codable {
+struct ForcastList: Codable, Identifiable {
+    let id = UUID()
     let dt: Int
     let temperature: Temterature
     let weather: [Weather]
