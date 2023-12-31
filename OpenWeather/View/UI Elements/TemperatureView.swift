@@ -16,11 +16,11 @@ struct TemperatureViewStyle {
 }
 
 struct TemperatureView: View {
-    var temperture: Int
+    var temperture: String
     var style: TemperatureViewStyle
     var body: some View {
         HStack {
-            Text("\(temperture)°C")
+            Text(temperture)
                 .font(style.fontStyle)
             Spacer()
             Image(systemName: style.weatherIco)
@@ -34,6 +34,6 @@ struct TemperatureView: View {
 
 struct TemperatureView_Previews: PreviewProvider {
     static var previews: some View {
-        TemperatureView(temperture: 28,  style: TemperatureViewStyle(weatherIco: "cloud.fill", weatherColor: .blue))
+        TemperatureView(temperture: "28°C",  style: TemperatureViewStyle(weatherIco: "cloud.fill", weatherColor: .blue))
     }
 }

@@ -23,12 +23,12 @@ struct ForcastView: View {
                         Text("Tomorrow")
                             .font(.title3)
                         Text(todaysDesc)
+                            .font(.caption)
                     }
-                    TemperatureView(temperture: 28, style: TemperatureViewStyle(weatherIco: "cloud.fill", weatherColor: .blue))
+                    TemperatureView(temperture: "28°C ~ 32°C", style: TemperatureViewStyle(weatherIco: "cloud.fill", weatherColor: .blue))
                 }
             }
         }
-        .padding()
     }
 }
 

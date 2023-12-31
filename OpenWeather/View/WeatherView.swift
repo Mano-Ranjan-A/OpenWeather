@@ -20,11 +20,9 @@ struct WeatherView: View {
                 // TODO: Call weather API
                 let apiSuccess = true
                 if apiSuccess {
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 5) {
-                            TodayWeatherView(cityName: "Chennai", todaysDesc: "Mostly Cloudy today", isLatestLocation: true)
-                            ForcastView(todaysDesc: "Mostly Cloudy")
-                        }
+                    List {
+                        TodayWeatherView(cityName: "Chennai", todaysDesc: "Mostly Cloudy today", isLatestLocation: true)
+                        ForcastView(todaysDesc: "Mostly Cloudy")
                     }
                 } else {
                     ErrorView(errorType: .apiError)

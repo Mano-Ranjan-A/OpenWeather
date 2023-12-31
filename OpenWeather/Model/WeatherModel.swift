@@ -49,9 +49,15 @@ struct ForcastList: Codable {
 // MARK: - Temterature
 struct Temterature: Codable {
     let avgTemp: Double
+    let minTemp: Double
+    let maxTemp: Double
+    let feelLike: Double
     
     enum CoadingKeys: String, CodingKey {
         case avgTemp = "temp"
+        case minTemp = "temp_min"
+        case maxTemp = "temp_max"
+        case feelLike = "feels_like"
     }
 }
 

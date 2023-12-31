@@ -24,20 +24,17 @@ struct WeatherAppTabView: View {
                     }
                 }
                 .navigationTitle("Open Weather")
-                .toolbar(content: {
-                    Image(systemName: "arrow.clockwise.circle.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 25, height: 25, alignment: .center)
-                        .foregroundColor(.accentColor)
-//                        .rotationEffect(.degrees(180), anchor: .center)
-                        .onTapGesture {
-                            self.reload.toggle()
-                        }
-                })
-                if true {
-                    
-                }
+//                .toolbar(content: {
+//                    Image(systemName: "arrow.clockwise.circle.fill")
+//                        .resizable()
+//                        .aspectRatio(contentMode: .fit)
+//                        .frame(width: 25, height: 25, alignment: .center)
+//                        .foregroundColor(.accentColor)
+////                        .rotationEffect(.degrees(180), anchor: .center)
+//                        .onTapGesture {
+//                            self.reload.toggle()
+//                        }
+//                })
             }
         }
     }

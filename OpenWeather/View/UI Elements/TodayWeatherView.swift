@@ -26,11 +26,17 @@ struct TodayWeatherView: View {
             
             Text("Todays weather")
             
-            TemperatureView(temperture: 28, style: TemperatureViewStyle(fontStyle: .system(size: 60), weatherImgWidth: 80, weatherImgHeight: 80, weatherIco: "cloud.fill", weatherColor: .blue))
-                
+            TemperatureView(temperture: "28°C", style: TemperatureViewStyle(fontStyle: .system(size: 60), weatherImgWidth: 80, weatherImgHeight: 80, weatherIco: "sun.max.fill", weatherColor: .blue))
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10))
+            HStack {
+                Text("Feels like 32°C")
+                Spacer()
+                Text("28°C ~ 34°C")
+            }
             Text(todaysDesc)
+                .font(.callout)
+                .padding(EdgeInsets(top: 3, leading: 0, bottom: 0, trailing: 0))
         }
-        .padding()
     }
 }
 
