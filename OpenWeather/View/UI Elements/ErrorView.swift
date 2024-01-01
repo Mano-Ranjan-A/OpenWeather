@@ -30,7 +30,7 @@ enum ErrorType {
         case .apiError:
             return "Oops sorry for that, its not you its us. Bad weather at our end 😅."
         case .noLocationAccess:
-            return "Allow location access to display weather data of your current location."
+            return "Allow location access to display weather data of your current location. Also make sure you have turned on location service under privacy settings."
         }
     }
 }

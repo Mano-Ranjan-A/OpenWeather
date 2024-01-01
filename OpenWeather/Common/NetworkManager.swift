@@ -21,11 +21,10 @@ class NetworkManager: ObservableObject {
         networkMonitor.start(queue: networkMonitorQueue)
     }
     
-    static func getWeatherData<T: Codable>(from url: URL) async -> T? {
+    static func getWeatherData(from url: URL) async -> Data? {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            let decoadedData = try? JSONDecoder().decode(T.self, from: data)
-            return decoadedData
+            return data
         } catch {
             return nil // As we are not going to show generic error we don't care what error occured
         }

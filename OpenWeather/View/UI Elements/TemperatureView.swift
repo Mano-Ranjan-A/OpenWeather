@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TemperatureViewStyle {
     
-    var fontStyle: Font = .title3
+    var fontStyle: Font = .body
     var weatherIcoScale: CGFloat = 1
     var weatherIco: String
     var weatherColor: Color
@@ -27,6 +27,7 @@ struct TemperatureView: View {
         HStack {
             Text(temperture)
                 .font(style.fontStyle)
+                .fontWeight(.bold)
             Spacer()
             Image(systemName: style.weatherIco)
                 .resizable()

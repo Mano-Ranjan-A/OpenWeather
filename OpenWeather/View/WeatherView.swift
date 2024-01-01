@@ -14,38 +14,45 @@ struct WeatherView: View {
     
     var body: some View {
         VStack {
-            if networkManager.isNetworkAvailble && locationManager.isLocationAuthorised && locationManager.location != nil {
+            //TODO: check the logic
+            if networkManager.isNetworkAvailble && locationManager.isLocationAuthorised && locationManager.location == nil {
                 // TODO: Call weather API
                 if let todayWeather = viewModel.todaysWeather {
                     List {
-                        TodayWeatherView(todayWeather: todayWeather, showLocationIco: true)
+                        TodayWeatherView(todayWeather: todayWeather, isLatestLocation: true, showLocationIco: true)
                         ForcastView(forcastList: WeatherViewModel.forcastPreviewData)
                             
                     }
                     .refreshable {
                         Task {
                             print(locationManager.location)
-                            await viewModel.fetchWeatherDataFor(lat: 44.34, //locationManager.location?.latitude,
-                                                                lon: 10.99) //locationManager.location?.longitude)
+                            await viewModel.fetchWeatherDataFor(lat: 80.2785, //locationManager.location?.latitude,
+                                                                lon: 13.0878) //locationManager.location?.longitude)
                         }
                     }
                 } else {
                     ErrorView(errorType: .apiError)
-                        .onAppear() {
-                            Task {
-                                print(locationManager.location)
-                                await viewModel.fetchWeatherDataFor(lat: locationManager.location?.latitude,
-                                                                    lon: locationManager.location?.longitude)
-                            }
-                        }
                 }
-            } else if networkManager.isNetworkAvailble && !locationManager.isLocationAuthorised {
+            } else if networkManager.isNetworkAvailble && (!locationManager.isLocationAuthorised || locationManager.location == nil) {
                 ErrorView(errorType: .noLocationAccess)
+                    .onAppear() {
+                        Task {
+                            print(locationManager.location)
+                            await viewModel.fetchWeatherDataFor(lat: locationManager.location?.latitude,
+                                                                lon: locationManager.location?.longitude)
+                        }
+                    }
             } else if !networkManager.isNetworkAvailble {
                 ErrorView(errorType: .networkError)
             }
         }
-        
+        .onAppear() {
+            Task {
+                print(locationManager.location)
+                await viewModel.fetchWeatherDataFor(lat: 44.34, //locationManager.location?.latitude,
+                                                    lon: 10.99) //locationManager.location?.longitude)
+            }
+        }
     }
 }
 

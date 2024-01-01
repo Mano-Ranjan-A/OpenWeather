@@ -12,10 +12,12 @@ struct TodayWeatherView: View {
     @State var isLatestLocation: Bool = false
     
     var showLocationIco = false
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(todayWeather.cityName)
+                // City name
+                Text(todayWeather.city)
                     .font(.title)
                     .fontWeight(.semibold)
                 if showLocationIco {
@@ -26,7 +28,7 @@ struct TodayWeatherView: View {
             Text("Todays weather")
             
             let ico = "cloud" //viewModel.getWeatherIcoName(for: todayWeather.weather.first?.id)
-            TemperatureView(temperture: "\(todayWeather.temperature.avgTemp)",
+            TemperatureView(temperture: "\(todayWeather.temperature.temp.limitToSingleDigitPrecision())",
                             style: TemperatureViewStyle(fontStyle: .system(size: 60),
                                                         weatherIcoScale: 2,
                                                         weatherIco: ico,
@@ -34,9 +36,9 @@ struct TodayWeatherView: View {
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10))
             
             HStack {
-                Text("Feels like \(todayWeather.temperature.feelLike)°C")
+                Text("Feels like \(todayWeather.temperature.temp.limitToSingleDigitPrecision())°C")
                 Spacer()
-                Text("\(todayWeather.temperature.minTemp)°C ~ \(todayWeather.temperature.maxTemp)°C")
+                Text("\(todayWeather.temperature.tempMin.limitToSingleDigitPrecision())°C ~ \(todayWeather.temperature.tempMax.limitToSingleDigitPrecision())°C")
             }
             Text(todayWeather.weather.first?.description ?? "")
                 .font(.callout)

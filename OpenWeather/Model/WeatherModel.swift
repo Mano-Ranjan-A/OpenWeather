@@ -11,32 +11,29 @@ import Foundation
 // MARK: - WeatherModel
 struct TodayWeatherModel: Codable {
     let weather: [Weather]
-    let temperature: Temterature
-    let cityName: String
+    let temperature: Temperature
+    let city: String
+    let cod: Int
     
-    enum CoadingKeys: String, CodingKey {
-        case weather = "weather"
+    enum CodingKeys: String, CodingKey {
+        case weather, cod
         case temperature = "main"
-        case cityName = "name"
+        case city = "name"
     }
 }
 
 // MARK: - ForcastWeatherModel
 struct ForcastWeatherModel: Codable {
-    let forcastList: [ForcastList]
-    let locationData: LocationData
-    
-    enum CodingKeys: String, CodingKey {
-        case forcastList = "list"
-        case locationData = "city"
-    }
+    let cod: String
+    let list: [ForcastList]
+    let city: City
 }
 
 // MARK: - ForcastList
 struct ForcastList: Codable, Identifiable {
     let id = UUID()
     let dt: Int
-    let temperature: Temterature
+    let temperature: Temperature
     let weather: [Weather]
     let dtTxt: String
 
@@ -47,18 +44,15 @@ struct ForcastList: Codable, Identifiable {
     }
 }
 
-// MARK: - Temterature
-struct Temterature: Codable {
-    let avgTemp: Double
-    let minTemp: Double
-    let maxTemp: Double
-    let feelLike: Double
-    
-    enum CoadingKeys: String, CodingKey {
-        case avgTemp = "temp"
-        case minTemp = "temp_min"
-        case maxTemp = "temp_max"
-        case feelLike = "feels_like"
+// MARK: - Temperature
+struct Temperature: Codable {
+    let temp, feelsLike, tempMin, tempMax: Double
+
+    enum CodingKeys: String, CodingKey {
+        case temp
+        case feelsLike = "feels_like"
+        case tempMin = "temp_min"
+        case tempMax = "temp_max"
     }
 }
 
@@ -69,13 +63,9 @@ struct Weather: Codable {
 }
 
 
-// MARK: - LocationData
-struct LocationData: Codable {
-    let cityName: String
-    
-    enum CoadingKeys: String, CodingKey {
-        case cityName = "name"
-    }
+// MARK: - City
+struct City: Codable {
+    let name: String
 }
 
 
