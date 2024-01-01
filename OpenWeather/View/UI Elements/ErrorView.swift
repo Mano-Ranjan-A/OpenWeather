@@ -11,6 +11,7 @@ enum ErrorType {
     case noLocationAccess
     case networkError
     case apiError
+    case locationNotAvailable
     
     var errIco: String {
         switch self {
@@ -20,6 +21,8 @@ enum ErrorType {
             return "exclamationmark.icloud.fill"
         case .noLocationAccess:
             return "location.slash.fill"
+        case .locationNotAvailable:
+            return ""
         }
     }
     
@@ -28,9 +31,11 @@ enum ErrorType {
         case .networkError:
             return "Oops seems like you are not connected to network"
         case .apiError:
-            return "Oops sorry for that, its not you its us. Bad weather at our end 😅."
+            return "Oops sorry for that. Bad weather at our end 😅."
         case .noLocationAccess:
             return "Allow location access to display weather data of your current location. Also make sure you have turned on location service under privacy settings."
+        case .locationNotAvailable:
+            return "Oops we couldn't find the city you searched for pleace cross check the city name."
         }
     }
 }

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct PicALocView: View {
     
-    @EnvironmentObject var networkManager: NetworkManager
     @EnvironmentObject var viewModel: WeatherViewModel
     
     @State var showWeatherForcast = false
@@ -43,28 +42,14 @@ struct PicALocView: View {
                 }
                 
                 if let weather = viewModel.todaysWeather, let forcast = viewModel.forcastWeather {
-                    // actual view
                     List {
-                        TodayWeatherView(todayWeather: weather)
-                        ForcastView(forcastList: forcast.list)
+                        let (ico, color) = viewModel.getWeatherIcoAndColorName(for: weather.weather.first?.id)
+                        TodayWeatherView(todayWeather: weather, weatherIco: ico, weatherColor: color)
+                        ForcastView(forcastList: forcast.list, weatherIco: "cloud.fill", weatherColor: .blue)
                     }
                     .refreshable {
                         print("refresh")
                     }
-                    // test view
-//                    if networkManager.isNetworkAvailble {
-//                        // TODO: Doo API call
-//                            List {
-//                                TodayWeatherView(todayWeather: WeatherViewModel.todayWeatherPreviewData)
-//                                ForcastView(forcastList: WeatherViewModel.forcastPreviewData)
-//                            }
-//                            .refreshable {
-//                                print("refresh")
-//                            }
-//                    } else {
-//                        ErrorView(errorType: .networkError)
-//                    }
-//
                 } else if !showSearchMessage && !viewModel.isLoading {
                     ErrorView(errorType: .apiError)
                 }
@@ -88,7 +73,6 @@ struct PicALocView: View {
 struct PicALocView_Previews: PreviewProvider {
     static var previews: some View {
         PicALocView()
-            .environmentObject(NetworkManager())
             .environmentObject(WeatherViewModel())
             .previewDevice(PreviewDevice(rawValue: "iPhone 12"))
     }

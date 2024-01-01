@@ -8,7 +8,7 @@
 import Foundation
 import Network
 
-class NetworkManager: ObservableObject {
+class NetworkManager {
     private let networkMonitor = NWPathMonitor()
     private let networkMonitorQueue = DispatchQueue(label: "monitorQueue")
     
@@ -21,7 +21,7 @@ class NetworkManager: ObservableObject {
         networkMonitor.start(queue: networkMonitorQueue)
     }
     
-    static func getWeatherData(from url: URL) async -> Data? {
+    func getWeatherData(from url: URL) async -> Data? {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             return data
