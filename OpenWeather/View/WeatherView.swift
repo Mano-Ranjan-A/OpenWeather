@@ -8,38 +8,40 @@
 import SwiftUI
 
 struct WeatherView: View {
-    @EnvironmentObject var viewModel: WeatherViewModel
     @StateObject var locationManager = LocationManager()
+    @StateObject var viewModel = WeatherViewModel()
     
     var body: some View {
-        VStack {
-            //TODO: check the logic
-            if locationManager.isLocationAuthorised && locationManager.location != nil {
-                // TODO: Call weather API
-                if let todayWeather = viewModel.todaysWeather {
+        ZStack {
+            VStack {
+                if let todayWeather = viewModel.todaysWeather, let forcast = viewModel.forcastWeather {
                     List {
-                        TodayWeatherView(todayWeather: todayWeather,
-                                         showLocationIco: true)
-                        ForcastView(forcastList: WeatherViewModel.forcastPreviewData)
-                            
+                        TodayWeatherView(todayWeather: todayWeather, showLocationIco: true)
+                        ForcastView(forcastList: forcast.list)
                     }
-                } else {
-                    ErrorView(errorType: .apiError)
+                } else if viewModel.didErrorOccured {
+                    ErrorView(errorType: viewModel.errotType)
                 }
-            } else if (!locationManager.isLocationAuthorised || locationManager.location == nil) {
-                ErrorView(errorType: .noLocationAccess)
             }
-        }
-        .refreshable {
-            Task {
-                await viewModel.fetchWeatherDataFor(lat: locationManager.location?.latitude,
-                                                    lon: locationManager.location?.longitude)
+            .refreshable {
+                locationManager.requestLocation()
+                Task {
+                    await viewModel.fetchWeatherDataFor(lat: locationManager.location?.latitude,
+                                                        lon: locationManager.location?.longitude)
+                }
             }
-        }
-        .onAppear {
-            Task {
-                await viewModel.fetchWeatherDataFor(lat: locationManager.location?.latitude,
-                                                    lon: locationManager.location?.longitude)
+            .onAppear {
+                if viewModel.firstTimeLaunch {
+                    viewModel.firstTimeLaunch = false
+                    locationManager.requestLocation()
+                    Task {
+                        await viewModel.fetchWeatherDataFor(lat: locationManager.location?.latitude,
+                                                            lon: locationManager.location?.longitude)
+                    }
+                }
+            }
+            if viewModel.isLoading {
+                ActivityIndicatorView()
             }
         }
     }
@@ -48,7 +50,5 @@ struct WeatherView: View {
 struct WeatherView_Previews: PreviewProvider {
     static var previews: some View {
         WeatherView()
-            .environmentObject(WeatherViewModel())
-            .previewDevice(PreviewDevice(rawValue: "iPhone 12"))
     }
 }

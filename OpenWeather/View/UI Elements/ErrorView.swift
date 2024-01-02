@@ -22,7 +22,7 @@ enum ErrorType {
         case .noLocationAccess:
             return "location.slash.fill"
         case .locationNotAvailable:
-            return ""
+            return "location.slash.fill"
         }
     }
     
@@ -35,7 +35,7 @@ enum ErrorType {
         case .noLocationAccess:
             return "Allow location access to display weather data of your current location. Also make sure you have turned on location service under privacy settings."
         case .locationNotAvailable:
-            return "Oops we couldn't find the city you searched for pleace cross check the city name."
+            return "Oops we couldn't find the city you searched for, please cross check the city name."
         }
     }
 }

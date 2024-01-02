@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ForcastView: View {
-    @State var forcastList: [ForcastList]
+    var forcastList: [ForcastList]
     
     var body: some View {
         
@@ -21,11 +21,11 @@ struct ForcastView: View {
                     VStack(alignment: .leading, spacing: 5) {
                         Text(getDayFrom(time: perDayForcast.dt))
                             .font(.title3)
-                        Text(perDayForcast.weather.first?.description ?? "")
+                        Text(perDayForcast.weather.first?.description.capitalizeFirstLetter ?? "")
                             .font(.subheadline)
                     }
                     
-                    let tempRange = "\(perDayForcast.temperature.tempMin.limitToSingleDigitPrecision())°C ~ \(perDayForcast.temperature.tempMax.limitToSingleDigitPrecision())°C"
+                    let tempRange = "\( Int(perDayForcast.temperature.tempMin) )°C ~ \( Int(perDayForcast.temperature.tempMax) )°C"
                     
                     TemperatureView(style: TemperatureViewStyle(),
                                     temperture: tempRange,
@@ -44,6 +44,6 @@ struct ForcastView: View {
 
 struct ForcastView_Previews: PreviewProvider {
     static var previews: some View {
-        ForcastView(forcastList: WeatherViewModel.forcastPreviewData)
+        ForcastView(forcastList: previewData.forcastPreviewData)
     }
 }

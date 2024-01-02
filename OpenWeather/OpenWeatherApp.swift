@@ -10,12 +10,9 @@ import SwiftUI
 @main
 struct OpenWeatherApp: App {
     
-    @StateObject var viewModel = WeatherViewModel()
-    
     var body: some Scene {
         WindowGroup {
             WeatherAppTabView()
-                .environmentObject(viewModel)
         }
     }
 }

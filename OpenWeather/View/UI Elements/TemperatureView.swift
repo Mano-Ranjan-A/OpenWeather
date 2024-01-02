@@ -17,11 +17,11 @@ struct TemperatureViewStyle {
         case 200..<235:
             return ("cloud.bolt.rain.fill", .yellow)
         case 300..<325:
-            return ("cloud.sun.rain.fill", .blue)
+            return ("cloud.drizzle.fill", .blue)
         case 500..<535:
-            return ("cloud.heavyrainfall.fill", .gray)
+            return ("cloud.rain.fill", .gray)
         case 600..<625:
-            return ("snow", .accentColor)
+            return ("snow", .cyan)
         case 700..<800:
             return ("cloud.fog.fill", .blue)
         case 801, 802:
@@ -31,7 +31,7 @@ struct TemperatureViewStyle {
         case 800:
             return ("sun.max.fill", .red)
         default:
-            return ("xmark.iclouf.fill", .red)
+            return ("thermometer", .accentColor)
         }
     }
 }

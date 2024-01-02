@@ -21,7 +21,7 @@ struct ActivityIndicatorView: View {
             HStack { Spacer() }
             Spacer()
         }
-        .background(Color(white: 0.5, opacity: 0.3))
+        .background(Color(white: 1, opacity: 0.95))
     }
 }
 

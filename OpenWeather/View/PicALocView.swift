@@ -9,16 +9,15 @@ import SwiftUI
 
 struct PicALocView: View {
     
-    @EnvironmentObject var viewModel: WeatherViewModel
+    @StateObject var viewModel = PicALocViewModel()
     
     @State var showWeatherForcast = false
     @State var cityName: String = "" // setting city name as empty by default
-    @State var showSearchMessage = true
     
     var body: some View {
         ZStack {
             VStack {
-                // Search field
+                //MARK: Search field
                 TextField("Enter city name", text: $cityName, onCommit: performWeatherSearch)
                     .textFieldStyle(.roundedBorder)
                     .padding()
@@ -28,7 +27,8 @@ struct PicALocView: View {
                     }
                 Spacer()
                 
-                if showSearchMessage {
+                // MARK: Search message view
+                if viewModel.showSearchMessage {
                     VStack {
                         Text("⛅️")
                             .font(.system(size: 60))
@@ -41,28 +41,28 @@ struct PicALocView: View {
                     Spacer()
                 }
                 
+                // MARK: Weather view
                 if let weather = viewModel.todaysWeather, let forcast = viewModel.forcastWeather {
                     List {
                         TodayWeatherView(todayWeather: weather)
                         ForcastView(forcastList: forcast.list)
                     }
                     .refreshable {
-                        print("refresh")
+                        Task {
+                            await viewModel.fetchWeatherDataFor(city: cityName)
+                        }
                     }
-                } else if !showSearchMessage && !viewModel.isSearchLocWeatherLoading {
+                } else if viewModel.didErrorOccured && !viewModel.isLoading {
                     ErrorView(errorType: .apiError)
                 }
             }
-        }
-            if viewModel.isSearchLocWeatherLoading {
+            if viewModel.isLoading {
                 ActivityIndicatorView()
             }
-            
+        }
     }
     
     func performWeatherSearch() {
-        self.showSearchMessage = false
-        self.showWeatherForcast = true
         Task {
             await viewModel.fetchWeatherDataFor(city: cityName)
         }
@@ -72,7 +72,5 @@ struct PicALocView: View {
 struct PicALocView_Previews: PreviewProvider {
     static var previews: some View {
         PicALocView()
-            .environmentObject(WeatherViewModel())
-            .previewDevice(PreviewDevice(rawValue: "iPhone 12"))
     }
 }

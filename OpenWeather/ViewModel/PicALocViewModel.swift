@@ -2,44 +2,36 @@
 //  WeatherViewModel.swift
 //  OpenWeather
 //
-//  Created by Mano on 30/12/23.
+//  Created by Mano on 02/01/24.
 //
 
 import Foundation
-import SwiftUI
 
 @MainActor
-class WeatherViewModel: ObservableObject {
-    
-    @StateObject var locationManager = LocationManager()
+class PicALocViewModel: ObservableObject {
     
     @Published var todaysWeather: TodayWeatherModel?
     @Published var forcastWeather: ForcastWeatherModel?
+    @Published var showSearchMessage = true
     @Published var didErrorOccured = false
     @Published var isLoading = false
     @Published var errotType: ErrorType = .networkError
     
-    var firstTimeLaunch = true
     private var networkManager = NetworkManager()
     private let openWeatherBaseURLString = "https://api.openweathermap.org/data/2.5/"
     private let apiKey = "bb74f9f6d729b0f7edab906e06539aad"
     
-   
-    /// Method to fetch weather data of users current location
-    func fetchWeatherDataFor(lat: Double?, lon: Double?) async {
-        guard let latitude = lat, let longitude = lon else {
-            didErrorOccured = true
-            errotType = .noLocationAccess
-            return
-        }
-        
-        let weatherUrlString = openWeatherBaseURLString + "weather?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)&units=metric"
-        let forcastUrlString = openWeatherBaseURLString + "forecast?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)&units=metric&cnt=5"
+    /// Method to fetch weather data of specified city
+    func fetchWeatherDataFor(city: String) async {
+        let weatherUrlString = openWeatherBaseURLString + "weather?q=\(city)&appid=\(apiKey)&units=metric"
+        let forcastUrlString = openWeatherBaseURLString + "forecast?q=\(city)&appid=\(apiKey)&units=metric&cnt=5"
         guard let weatherUrl = URL(string: weatherUrlString), let forcastUrl = URL(string: forcastUrlString) else { return }
         
         isLoading = true
         isLoading = await !callApi(weatherUrl, forcastUrl)
+        showSearchMessage = false
     }
+    
     
     /// Method to call the weather API and always return true to indicate api call ended
     private func callApi(_ weatherUrl: URL, _ forcastUrl: URL) async -> Bool {

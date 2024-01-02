@@ -35,12 +35,10 @@ struct ForcastList: Codable, Identifiable {
     let dt: Int
     let temperature: Temperature
     let weather: [Weather]
-    let dtTxt: String
 
     enum CodingKeys: String, CodingKey {
         case dt, weather
         case temperature = "main"
-        case dtTxt = "dt_txt"
     }
 }
 

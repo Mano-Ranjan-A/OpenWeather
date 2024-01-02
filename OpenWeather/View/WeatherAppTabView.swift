@@ -30,6 +30,5 @@ struct WeatherAppTabView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         WeatherAppTabView()
-            .previewDevice(PreviewDevice(rawValue: "iPhone 12"))
     }
 }

@@ -33,6 +33,7 @@ extension LocationManager: CLLocationManagerDelegate {
             self.isLocationAuthorised = false
         case .authorizedWhenInUse, .authorizedAlways:
             self.isLocationAuthorised = true
+            requestLocation()
         @unknown default:
             self.isLocationAuthorised = false
         }
