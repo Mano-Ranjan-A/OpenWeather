@@ -9,11 +9,8 @@ import SwiftUI
 
 struct TodayWeatherView: View {
     @State var todayWeather: TodayWeatherModel
-    @State var isLatestLocation: Bool = false
     
     var showLocationIco = false
-    var weatherIco: String
-    var weatherColor: Color
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -23,17 +20,16 @@ struct TodayWeatherView: View {
                     .font(.title)
                     .fontWeight(.semibold)
                 if showLocationIco {
-                    Image(systemName: isLatestLocation ? "location.fill" : "location")
+                    Image(systemName: "location.fill")
                 }
             }
             
             Text("Todays weather")
             
-            TemperatureView(temperture: "\(todayWeather.temperature.temp.limitToSingleDigitPrecision())",
-                            style: TemperatureViewStyle(fontStyle: .system(size: 60),
-                                                        weatherIcoScale: 2,
-                                                        weatherIco: weatherIco,
-                                                        weatherColor: weatherColor))
+            TemperatureView(style: TemperatureViewStyle(fontStyle: .system(size: 60),
+                                                        weatherIcoScale: 2),
+                            temperture: "\(todayWeather.temperature.temp.limitToSingleDigitPrecision())",
+                            weatherId: todayWeather.weather.first?.id ?? 0)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10))
             
             HStack {
@@ -50,6 +46,6 @@ struct TodayWeatherView: View {
 
 struct WeatherDataView_Previews: PreviewProvider {
     static var previews: some View {
-        TodayWeatherView(todayWeather: WeatherViewModel.todayWeatherPreviewData, isLatestLocation: true, weatherIco: "cloud.fill", weatherColor: .blue)
+        TodayWeatherView(todayWeather: WeatherViewModel.todayWeatherPreviewData)
     }
 }

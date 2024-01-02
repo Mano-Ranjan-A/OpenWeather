@@ -11,20 +11,18 @@ struct WeatherAppTabView: View {
     @State var reload = false
     var body: some View {
         NavigationView {
-            ZStack {
-                TabView {
-                    WeatherView()
-                        .tabItem {
-                            Label("Weather", systemImage: "cloud.sun.fill")
-                        }
-                    
-                    PicALocView()
-                        .tabItem {
-                            Label("Search", systemImage: "location.fill")
+            TabView {
+                WeatherView()
+                    .tabItem {
+                        Label("Weather", systemImage: "cloud.sun.fill")
                     }
+                
+                PicALocView()
+                    .tabItem {
+                        Label("Search", systemImage: "location.fill")
                 }
-                .navigationTitle("Open Weather")
             }
+            .navigationTitle("Open Weather")
         }
     }
 }

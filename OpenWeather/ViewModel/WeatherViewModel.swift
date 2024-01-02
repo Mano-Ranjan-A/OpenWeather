@@ -13,7 +13,8 @@ class WeatherViewModel: ObservableObject {
     
     @Published var todaysWeather: TodayWeatherModel?
     @Published var forcastWeather: ForcastWeatherModel?
-    @Published var isLoading = false
+    @Published var isCurrentLocWeatherLoading = false
+    @Published var isSearchLocWeatherLoading = false
     @Published var didErrorOccured = false
     @Published var errotType: ErrorType = .networkError
     
@@ -44,8 +45,8 @@ extension WeatherViewModel {
         let forcastUrlString = openWeatherBaseURLString + "forecast?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)&units=metric"
         guard let weatherUrl = URL(string: weatherUrlString), let forcastUrl = URL(string: forcastUrlString) else { return }
         
-        isLoading = true
-        isLoading = await callApi(weatherUrl, forcastUrl)
+        isCurrentLocWeatherLoading = true
+        isCurrentLocWeatherLoading = await callApi(weatherUrl, forcastUrl)
     }
     
     /// Method to fetch weather data of specified city
@@ -54,8 +55,8 @@ extension WeatherViewModel {
         let forcastUrlString = openWeatherBaseURLString + "forecast?q=\(city)&appid=\(apiKey)&units=metric&cnt=5"
         guard let weatherUrl = URL(string: weatherUrlString), let forcastUrl = URL(string: forcastUrlString) else { return }
         
-        isLoading = true
-        isLoading = await !callApi(weatherUrl, forcastUrl)
+        isSearchLocWeatherLoading = true
+        isSearchLocWeatherLoading = await !callApi(weatherUrl, forcastUrl)
     }
     
     
@@ -85,37 +86,11 @@ extension WeatherViewModel {
 }
 
 
-extension WeatherViewModel {
-    
-    func getWeatherIcoAndColorName(for weatherId: Int?) -> (String, Color) {
-        guard let id = weatherId else {
-            return ("xmark.iclouf.fill", .red)
-        }
-        switch id {
-        case 200..<235:
-            return ("cloud.bolt.rain.fill", .yellow)
-        case 300..<325:
-            return ("cloud.sun.rain.fill", .blue)
-        case 500..<535:
-            return ("cloud.heavyrainfall.fill", .gray)
-        case 600..<625:
-            return ("snow", .accentColor)
-        case 700..<800:
-            return ("cloud.fog.fill", .blue)
-        case 801, 802:
-            return ("cloud.sun.fill", .orange)
-        case 803, 804:
-            return ("smoke.fill", .gray)
-        case 800:
-            return ("sun.max.fill", .red)
-        default:
-            return ("xmark.iclouf.fill", .red)
-        }
-    }
-    
-}
-
+// MARK: Extension of Double data type
 extension Double {
+    
+    /// Method to convert double as single point precision and return as string
+    ///  - eg: input = 3.45643 output will be "3.4"
     func limitToSingleDigitPrecision() -> String {
         let nf = NumberFormatter()
         nf.roundingMode = .down

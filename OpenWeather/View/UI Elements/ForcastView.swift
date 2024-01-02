@@ -10,9 +10,6 @@ import SwiftUI
 struct ForcastView: View {
     @State var forcastList: [ForcastList]
     
-    var weatherIco: String
-    var weatherColor: Color
-    
     var body: some View {
         
         VStack(alignment: .leading, spacing: 20) {
@@ -27,16 +24,19 @@ struct ForcastView: View {
                         Text(perDayForcast.weather.first?.description ?? "")
                             .font(.subheadline)
                     }
-                    .frame(maxWidth: 50)
-                    TemperatureView(temperture: "\(perDayForcast.temperature.tempMin.limitToSingleDigitPrecision())°C ~ \(perDayForcast.temperature.tempMax.limitToSingleDigitPrecision())°C",
-                                    style: TemperatureViewStyle(weatherIco: weatherIco,
-                                                                weatherColor: weatherColor))
+                    
+                    let tempRange = "\(perDayForcast.temperature.tempMin.limitToSingleDigitPrecision())°C ~ \(perDayForcast.temperature.tempMax.limitToSingleDigitPrecision())°C"
+                    
+                    TemperatureView(style: TemperatureViewStyle(),
+                                    temperture: tempRange,
+                                    weatherId: perDayForcast.weather.first?.id ?? 0)
                 }
             }
         }
     }
     
     func getDayFrom(time: Int) -> String {
+        let date = Date(timeIntervalSince1970: Double(time))
         return "Tomorrow"
     }
 }
@@ -44,6 +44,6 @@ struct ForcastView: View {
 
 struct ForcastView_Previews: PreviewProvider {
     static var previews: some View {
-        ForcastView(forcastList: WeatherViewModel.forcastPreviewData, weatherIco: "cloud.fill", weatherColor: .blue)
+        ForcastView(forcastList: WeatherViewModel.forcastPreviewData)
     }
 }

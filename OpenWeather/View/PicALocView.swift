@@ -43,19 +43,18 @@ struct PicALocView: View {
                 
                 if let weather = viewModel.todaysWeather, let forcast = viewModel.forcastWeather {
                     List {
-                        let (ico, color) = viewModel.getWeatherIcoAndColorName(for: weather.weather.first?.id)
-                        TodayWeatherView(todayWeather: weather, weatherIco: ico, weatherColor: color)
-                        ForcastView(forcastList: forcast.list, weatherIco: "cloud.fill", weatherColor: .blue)
+                        TodayWeatherView(todayWeather: weather)
+                        ForcastView(forcastList: forcast.list)
                     }
                     .refreshable {
                         print("refresh")
                     }
-                } else if !showSearchMessage && !viewModel.isLoading {
+                } else if !showSearchMessage && !viewModel.isSearchLocWeatherLoading {
                     ErrorView(errorType: .apiError)
                 }
             }
         }
-            if viewModel.isLoading {
+            if viewModel.isSearchLocWeatherLoading {
                 ActivityIndicatorView()
             }
             
