@@ -25,7 +25,7 @@ struct ForcastView: View {
                             .font(.subheadline)
                     }
                     
-                    let tempRange = "\( Int(perDayForcast.temperature.tempMin) )°C ~ \( Int(perDayForcast.temperature.tempMax) )°C"
+                    let tempRange = "\( perDayForcast.temperature.tempMin.roundToInt )°C ~ \( perDayForcast.temperature.tempMax.roundToInt )°C"
                     
                     TemperatureView(style: TemperatureViewStyle(),
                                     temperture: tempRange,
@@ -37,7 +37,13 @@ struct ForcastView: View {
     
     func getDayFrom(time: Int) -> String {
         let date = Date(timeIntervalSince1970: Double(time))
-        return "Tomorrow"
+        guard true else {
+            return "Tomorrow"
+        }
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "EEEE"
+        let weekDay = dateFormater.string(from: date)
+        return weekDay
     }
 }
 

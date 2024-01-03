@@ -8,10 +8,8 @@
 import SwiftUI
 
 struct PicALocView: View {
-    
     @StateObject var viewModel = PicALocViewModel()
     
-    @State var showWeatherForcast = false
     @State var cityName: String = "" // setting city name as empty by default
     
     var body: some View {
@@ -52,8 +50,9 @@ struct PicALocView: View {
                             await viewModel.fetchWeatherDataFor(city: cityName)
                         }
                     }
-                } else if viewModel.didErrorOccured && !viewModel.isLoading {
-                    ErrorView(errorType: .apiError)
+                } else if viewModel.didErrorOccured {
+                    ErrorView(errorType: viewModel.errotType)
+                    Spacer()
                 }
             }
             if viewModel.isLoading {

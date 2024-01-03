@@ -24,6 +24,12 @@ struct WeatherAppTabView: View {
             }
             .navigationTitle("Open Weather")
         }
+        .onAppear {
+            // code to fix the transperrency issue in swift UI tab bar
+            let tabBarAppearence = UITabBarAppearance()
+            tabBarAppearence.configureWithOpaqueBackground()
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearence
+        }
     }
 }
 

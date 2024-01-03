@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct WeatherView: View {
-    @StateObject var locationManager = LocationManager()
     @StateObject var viewModel = WeatherViewModel()
     
     var body: some View {
@@ -24,20 +23,12 @@ struct WeatherView: View {
                 }
             }
             .refreshable {
-                locationManager.requestLocation()
-                Task {
-                    await viewModel.fetchWeatherDataFor(lat: locationManager.location?.latitude,
-                                                        lon: locationManager.location?.longitude)
-                }
+                viewModel.fetchWeather()
             }
             .onAppear {
-                if viewModel.firstTimeLaunch {
+                if viewModel.firstTimeLaunch || viewModel.todaysWeather == nil {
                     viewModel.firstTimeLaunch = false
-                    locationManager.requestLocation()
-                    Task {
-                        await viewModel.fetchWeatherDataFor(lat: locationManager.location?.latitude,
-                                                            lon: locationManager.location?.longitude)
-                    }
+                    viewModel.fetchWeather()
                 }
             }
             if viewModel.isLoading {

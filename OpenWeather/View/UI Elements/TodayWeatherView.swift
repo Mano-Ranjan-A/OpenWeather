@@ -24,18 +24,18 @@ struct TodayWeatherView: View {
                 }
             }
             
-            Text("Todays weather")
+            Text("Today's weather")
             
             TemperatureView(style: TemperatureViewStyle(fontStyle: .system(size: 60),
                                                         weatherIcoScale: 2),
-                            temperture: "\(Int(todayWeather.temperature.temp))°C",
+                            temperture: "\(todayWeather.temperature.temp.roundToInt)°C",
                             weatherId: todayWeather.weather.first?.id ?? 0)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 8))
             
             HStack {
-                Text("Feels like \( Int(todayWeather.temperature.temp) )°C")
+                Text("Feels like \( todayWeather.temperature.temp.roundToInt )°C")
                 Spacer()
-                Text("\( Int(todayWeather.temperature.tempMin) )°C ~ \( Int(todayWeather.temperature.tempMax) )°C")
+                Text("\( todayWeather.temperature.tempMin.roundToInt )°C ~ \( todayWeather.temperature.tempMax.roundToInt )°C")
             }
             Text(todayWeather.weather.first?.description.capitalizeFirstLetter ?? "")
                 .font(.callout)

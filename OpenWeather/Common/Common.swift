@@ -27,3 +27,9 @@ extension String {
         return prefix(1).uppercased() + dropFirst()
     }
 }
+
+extension Double {
+    var roundToInt: Int {
+        return Int(self.rounded())
+    }
+}
