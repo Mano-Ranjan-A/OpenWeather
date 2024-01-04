@@ -24,6 +24,7 @@
 		3FBABED62B3EA4500023320C /* PicALocView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBABED52B3EA4500023320C /* PicALocView.swift */; };
 		945A2F172B44314B000C50A7 /* PicALocViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945A2F162B44314B000C50A7 /* PicALocViewModel.swift */; };
 		945A2F192B4431CD000C50A7 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945A2F182B4431CD000C50A7 /* Common.swift */; };
+		946EE2772B46DB720065E0C7 /* WeatherApiCaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946EE2762B46DB720065E0C7 /* WeatherApiCaller.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		3FBABED52B3EA4500023320C /* PicALocView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicALocView.swift; sourceTree = "<group>"; };
 		945A2F162B44314B000C50A7 /* PicALocViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicALocViewModel.swift; sourceTree = "<group>"; };
 		945A2F182B4431CD000C50A7 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
+		946EE2762B46DB720065E0C7 /* WeatherApiCaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApiCaller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 			children = (
 				3F6365752B3FD8A6008833F3 /* NetworkManager.swift */,
 				3F6365792B40117E008833F3 /* LocationManager.swift */,
+				946EE2762B46DB720065E0C7 /* WeatherApiCaller.swift */,
 				945A2F182B4431CD000C50A7 /* Common.swift */,
 			);
 			path = Common;
@@ -231,6 +234,7 @@
 				3F6365782B3FF450008833F3 /* ErrorView.swift in Sources */,
 				3F5D85A22B4074B000B60886 /* WeatherViewModel.swift in Sources */,
 				945A2F192B4431CD000C50A7 /* Common.swift in Sources */,
+				946EE2772B46DB720065E0C7 /* WeatherApiCaller.swift in Sources */,
 				3F9333902B3EF7C500AC7FA2 /* ForcastView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

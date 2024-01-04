@@ -21,10 +21,6 @@ class LocationManager: NSObject {
         locationManager.requestWhenInUseAuthorization()
     }
     
-    func setDelegate(delegate: LocationManagerProtocol) {
-        self.delegate = delegate
-    }
-    
     func requestLocation() {
         locationManager.requestLocation()
     }
@@ -36,6 +32,7 @@ extension LocationManager: CLLocationManagerDelegate {
         switch manager.authorizationStatus {
         case .notDetermined, .restricted, .denied:
             self.isLocationAuthorised = false
+            self.delegate?.didUpdateLocation(location: nil)
         case .authorizedWhenInUse, .authorizedAlways:
             self.isLocationAuthorised = true
             requestLocation()

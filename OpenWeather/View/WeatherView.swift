@@ -16,7 +16,7 @@ struct WeatherView: View {
                 if let todayWeather = viewModel.todaysWeather, let forcast = viewModel.forcastWeather {
                     List {
                         TodayWeatherView(todayWeather: todayWeather, showLocationIco: true)
-                        ForcastView(forcastList: forcast.list)
+                        ForcastView(forcastList: forcast.list ?? [])
                     }
                 } else if viewModel.didErrorOccured {
                     ErrorView(errorType: viewModel.errotType)

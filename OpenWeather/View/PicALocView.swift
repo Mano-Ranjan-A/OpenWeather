@@ -16,7 +16,7 @@ struct PicALocView: View {
         ZStack {
             VStack {
                 //MARK: Search field
-                TextField("Enter city name", text: $cityName, onCommit: performWeatherSearch)
+                TextField(OpenWeatherConstants.enterCity, text: $cityName, onCommit: performWeatherSearch)
                     .textFieldStyle(.roundedBorder)
                     .padding()
                     .tint(.accentColor)
@@ -30,7 +30,7 @@ struct PicALocView: View {
                     VStack {
                         Text("⛅️")
                             .font(.system(size: 60))
-                        Text("Want to feel how weather is like in other parts of the world. Search the city to see whats it like there.")
+                        Text(OpenWeatherConstants.searchMsg)
                             .fontWeight(.medium)
                             .font(.title2)
                             .multilineTextAlignment(.center)
@@ -43,7 +43,7 @@ struct PicALocView: View {
                 if let weather = viewModel.todaysWeather, let forcast = viewModel.forcastWeather {
                     List {
                         TodayWeatherView(todayWeather: weather)
-                        ForcastView(forcastList: forcast.list)
+                        ForcastView(forcastList: forcast.list ?? [])
                     }
                     .refreshable {
                         Task {

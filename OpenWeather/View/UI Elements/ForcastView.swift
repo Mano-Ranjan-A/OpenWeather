@@ -13,37 +13,43 @@ struct ForcastView: View {
     var body: some View {
         
         VStack(alignment: .leading, spacing: 20) {
-            Text("Weather forecast for next 5 days")
+            
+            Text(OpenWeatherConstants.forcastMsg)
                 .font(.title2)
                 .fontWeight(.medium)
+            
             ForEach(forcastList) { perDayForcast in
+                
                 HStack(spacing: 25) {
+                    
                     VStack(alignment: .leading, spacing: 5) {
-                        Text(getDayFrom(time: perDayForcast.dt))
+                        Text(getDateFrom(time: perDayForcast.dt))
                             .font(.title3)
                         Text(perDayForcast.weather.first?.description.capitalizeFirstLetter ?? "")
                             .font(.subheadline)
                     }
+                    .frame(maxWidth: 100)
                     
-                    let tempRange = "\( perDayForcast.temperature.tempMin.roundToInt )°C ~ \( perDayForcast.temperature.tempMax.roundToInt )°C"
                     
+                    let temp = "\(perDayForcast.temperature.temp.roundToInt)°C"
                     TemperatureView(style: TemperatureViewStyle(),
-                                    temperture: tempRange,
+                                    temperture: temp,
                                     weatherId: perDayForcast.weather.first?.id ?? 0)
                 }
             }
         }
     }
     
-    func getDayFrom(time: Int) -> String {
+    func getDateFrom(time: Int) -> String {
         let date = Date(timeIntervalSince1970: Double(time))
-        guard true else {
+        
+        guard !Calendar.current.isDateInTomorrow(date) else {
             return "Tomorrow"
         }
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = "EEEE"
-        let weekDay = dateFormater.string(from: date)
-        return weekDay
+        let formatedDate = dateFormater.string(from: date)
+        return formatedDate
     }
 }
 

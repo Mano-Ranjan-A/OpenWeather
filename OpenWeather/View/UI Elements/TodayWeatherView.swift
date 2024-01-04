@@ -16,7 +16,7 @@ struct TodayWeatherView: View {
         VStack(alignment: .leading) {
             HStack {
                 // City name
-                Text(todayWeather.city)
+                Text(todayWeather.city ?? "")
                     .font(.title)
                     .fontWeight(.semibold)
                 if showLocationIco {
@@ -24,22 +24,25 @@ struct TodayWeatherView: View {
                 }
             }
             
-            Text("Today's weather")
-            
-            TemperatureView(style: TemperatureViewStyle(fontStyle: .system(size: 60),
-                                                        weatherIcoScale: 2),
-                            temperture: "\(todayWeather.temperature.temp.roundToInt)°C",
-                            weatherId: todayWeather.weather.first?.id ?? 0)
+            Text(OpenWeatherConstants.todaysWeather)
+            if let temperature = todayWeather.temperature, let weather = todayWeather.weather {
+                TemperatureView(style: TemperatureViewStyle(fontStyle: .system(size: 60), weatherIcoScale: 2),
+                                temperture: "\(temperature.temp.roundToInt)°C",
+                                weatherId: weather.first?.id ?? 0)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 8))
-            
-            HStack {
-                Text("Feels like \( todayWeather.temperature.temp.roundToInt )°C")
-                Spacer()
-                Text("\( todayWeather.temperature.tempMin.roundToInt )°C ~ \( todayWeather.temperature.tempMax.roundToInt )°C")
+                
+                HStack {
+                    Text("Feels like \( temperature.temp.roundToInt )°C")
+                    Spacer()
+                    let minTemp = temperature.tempMin.roundToInt
+                    let maxTemp = temperature.tempMax.roundToInt
+                    let tempRange = "\(minTemp)°C ~ \(maxTemp)°C"
+                    Text( tempRange )
+                }
+                Text(todayWeather.weather?.first?.description.capitalizeFirstLetter ?? "")
+                    .font(.callout)
+                    .padding(EdgeInsets(top: 3, leading: 0, bottom: 0, trailing: 0))
             }
-            Text(todayWeather.weather.first?.description.capitalizeFirstLetter ?? "")
-                .font(.callout)
-                .padding(EdgeInsets(top: 3, leading: 0, bottom: 0, trailing: 0))
         }
     }
 }
