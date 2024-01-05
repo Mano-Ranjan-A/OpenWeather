@@ -6,49 +6,65 @@
 //
 
 import Foundation
+import CoreLocation
+import SwiftUI
 
+protocol LocationManagerProtocol {
+    func didUpdateLocation(location: CLLocationCoordinate2D?)
+}
+
+@MainActor
 class WeatherViewModel: ObservableObject {
     
     @Published var todaysWeather: TodayWeatherModel?
     @Published var forcastWeather: ForcastWeatherModel?
+    @Published var didErrorOccured = false
+    @Published var isLoading = false
+    @Published var errotType: ErrorType = .noError
     
-    static let testData = TodayWeatherModel(weather: [Weather(id: 20, description: "Cloudy")],
-                                     temperature: Temterature(avgTemp: 28,
-                                                              minTemp: 26,
-                                                              maxTemp: 32,
-                                                              feelLike: 30),
-                                     cityName: "Chenni")
-    func fetchWeatherDataFor(lat: String, long: String) {
-        // TODO: Call API
+    private let networkManager = NetworkManager()
+    private let locationManager = LocationManager()
+    
+    var firstTimeLaunch = true
+    
+    init() {
+        locationManager.delegate = self
     }
     
-    func fetchWeatherDataFor(city: String) {
-//         TODO: Call API
+    /// Method to call the location manager and retrive the users latest location and  update weather 
+    func fetchWeather() {
+        locationManager.requestLocation()
     }
     
-    func getWeatherIcoName(for weatherId: Int?) -> String {
-        guard let id = weatherId else {
-            return "xmark.iclouf.fill"
+    /// Method to fetch weather data of users current location
+    private func fetchWeatherDataFor(lat: Double?, lon: Double?) async {
+         isLoading = true
+        
+        guard let latitude = lat, let longitude = lon else {
+            isLoading = false
+            didErrorOccured = true
+            errotType = .noLocationAccess
+            return
         }
-        switch id {
-        case 200..<235:
-            return "cloud.bolt.rain.fill"
-        case 300..<325:
-            return "cloud.sun.rain.fill"
-        case 500..<535:
-            return "cloud.heavyrainfall.fill"
-        case 600..<625:
-            return "snow"
-        case 700..<800:
-            return "cloud.fog.fill"
-        case 801, 802:
-            return "cloud.sun.fill"
-        case 803, 804:
-            return "smoke.fill"
-        case 800:
-            return "sun.max.fill"
-        default:
-            return "xmark.iclouf.fill"
+        
+        let weatherUrlString = OpenWeatherConstants.openWeatherBaseURLString + "weather?lat=\(latitude)&lon=\(longitude)&appid=\(OpenWeatherConstants.apiKey)&units=metric"
+        let forcastUrlString = OpenWeatherConstants.openWeatherBaseURLString + "forecast?lat=\(latitude)&lon=\(longitude)&appid=\(OpenWeatherConstants.apiKey)&units=metric"
+        guard let weatherUrl = URL(string: weatherUrlString), let forcastUrl = URL(string: forcastUrlString) else { return }
+        
+        (didErrorOccured, errotType, todaysWeather, forcastWeather) = await WeatherApiCaller().callApiWith(weatherUrl, and: forcastUrl, using: networkManager)
+        isLoading = false
+    }
+}
+
+// MARK: LocationManagerProtocol implementation
+extension WeatherViewModel: LocationManagerProtocol {
+    
+    /// Method  to call the weather API as soon as location manager sends the current location
+    func didUpdateLocation(location: CLLocationCoordinate2D?) {
+        Task {
+            await fetchWeatherDataFor(lat: location?.latitude, lon: location?.longitude)
         }
     }
+    
+    
 }

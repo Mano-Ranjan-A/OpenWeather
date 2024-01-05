@@ -10,54 +10,70 @@ import Foundation
 
 // MARK: - WeatherModel
 struct TodayWeatherModel: Codable {
-    let weather: [Weather]
-    let temperature: Temterature
-    let cityName: String
+    let weather: [Weather]?
+    let temperature: Temperature?
+    let city: String?
     
-    enum CoadingKeys: String, CodingKey {
-        case weather = "weather"
+    enum CodingKeys: String, CodingKey {
+        case weather
         case temperature = "main"
-        case cityName = "name"
+        case city = "name"
     }
 }
 
 // MARK: - ForcastWeatherModel
 struct ForcastWeatherModel: Codable {
-    let forcastList: [ForcastList]
-    let locationData: LocationData
+    let list: [ForcastList]?
+    let city: City?
+    let cod: String?
+    let message: String?
     
-    enum CodingKeys: String, CodingKey {
-        case forcastList = "list"
-        case locationData = "city"
+    init(list: [ForcastList]?, city: City?, cod: String?, message: String?) {
+        self.list = list
+        self.city = city
+        self.cod = cod
+        self.message = message
     }
+    
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.list = try? container.decodeIfPresent([ForcastList].self, forKey: .list)
+        self.city = try? container.decodeIfPresent(City.self, forKey: .city)
+        self.cod = try? container.decodeIfPresent(String.self, forKey: .cod)
+        
+        /// Trying to decode in both Int and  String as API is returning int  if no error and string when error occured
+        if let msg = try? container.decodeIfPresent(Int.self, forKey: .message) {
+            self.message = String(msg)
+        } else {
+            self.message = try? container.decodeIfPresent(String.self, forKey: .message)
+        }
+    }
+    
 }
 
 // MARK: - ForcastList
-struct ForcastList: Codable {
+struct ForcastList: Codable, Identifiable {
+    let id = UUID()
     let dt: Int
-    let temperature: Temterature
+    let temperature: Temperature
     let weather: [Weather]
-    let dtTxt: String
 
     enum CodingKeys: String, CodingKey {
         case dt, weather
         case temperature = "main"
-        case dtTxt = "dt_txt"
     }
 }
 
-// MARK: - Temterature
-struct Temterature: Codable {
-    let avgTemp: Double
-    let minTemp: Double
-    let maxTemp: Double
-    let feelLike: Double
-    
-    enum CoadingKeys: String, CodingKey {
-        case avgTemp = "temp"
-        case minTemp = "temp_min"
-        case maxTemp = "temp_max"
-        case feelLike = "feels_like"
+// MARK: - Temperature
+struct Temperature: Codable {
+    let temp, feelsLike, tempMin, tempMax: Double
+
+    enum CodingKeys: String, CodingKey {
+        case temp
+        case feelsLike = "feels_like"
+        case tempMin = "temp_min"
+        case tempMax = "temp_max"
     }
 }
 
@@ -68,13 +84,9 @@ struct Weather: Codable {
 }
 
 
-// MARK: - LocationData
-struct LocationData: Codable {
-    let cityName: String
-    
-    enum CoadingKeys: String, CodingKey {
-        case cityName = "name"
-    }
+// MARK: - City
+struct City: Codable {
+    let name: String
 }
 
 

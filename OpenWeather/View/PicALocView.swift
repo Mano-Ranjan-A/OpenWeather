@@ -8,64 +8,69 @@
 import SwiftUI
 
 struct PicALocView: View {
+    @StateObject var viewModel = PicALocViewModel()
     
-    @EnvironmentObject var networkManager: NetworkManager
-    @EnvironmentObject var viewModel: WeatherViewModel
-    
-    @State var showWeatherForcast = false
     @State var cityName: String = "" // setting city name as empty by default
     
     var body: some View {
-        VStack {
-            // Search field
-            TextField("Enter city name", text: $cityName, onCommit: performWeatherSearch)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-                .keyboardType(.webSearch)
-                .onAppear() {
-                    UITextField.appearance().clearButtonMode = .whileEditing
-                }
-            
-            if !showWeatherForcast {
-                if networkManager.isNetworkAvailble {
-                    // TODO: Doo API call
-                    let apiSuccess = true
-                    if apiSuccess {
-                        List {
-                            TodayWeatherView()
-                            ForcastView()
-                        }
-                    } else {
-                        ErrorView(errorType: .apiError)
+        ZStack {
+            VStack {
+                //MARK: Search field
+                TextField(OpenWeatherConstants.enterCity, text: $cityName, onCommit: performWeatherSearch)
+                    .textFieldStyle(.roundedBorder)
+                    .padding()
+                    .tint(.accentColor)
+                    .autocorrectionDisabled()
+                    .onAppear {
+                        UITextField.appearance().clearButtonMode = .whileEditing
                     }
-                } else {
-                    ErrorView(errorType: .networkError)
-                }
-            } else {
-                VStack {
-                    Text("⛅️")
-                        .font(.system(size: 60))
-                    Text("Want to feel how weather is like in other parts of the world. Search the city to see whats it like there.")
-                        .fontWeight(.medium)
-                        .font(.title2)
-                        .multilineTextAlignment(.center)
-                }
-                .padding()
                 Spacer()
+                
+                // MARK: Search message view
+                if viewModel.showSearchMessage {
+                    VStack {
+                        Text("⛅️")
+                            .font(.system(size: 60))
+                        Text(OpenWeatherConstants.searchMsg)
+                            .fontWeight(.medium)
+                            .font(.title2)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
+                    Spacer()
+                }
+                
+                // MARK: Weather view
+                if let weather = viewModel.todaysWeather, let forcast = viewModel.forcastWeather {
+                    List {
+                        TodayWeatherView(todayWeather: weather)
+                        ForcastView(forcastList: forcast.list ?? [])
+                    }
+                    .refreshable {
+                        Task {
+                            await viewModel.fetchWeatherDataFor(city: cityName)
+                        }
+                    }
+                } else if viewModel.didErrorOccured {
+                    ErrorView(errorType: viewModel.errotType)
+                    Spacer()
+                }
             }
-            
+            if viewModel.isLoading {
+                ActivityIndicatorView()
+            }
         }
     }
     
     func performWeatherSearch() {
-        self.showWeatherForcast = true
+        Task {
+            await viewModel.fetchWeatherDataFor(city: cityName)
+        }
     }
 }
 
 struct PicALocView_Previews: PreviewProvider {
     static var previews: some View {
         PicALocView()
-            .environmentObject(NetworkManager())
-            .environmentObject(WeatherViewModel())
     }
 }

@@ -8,11 +8,12 @@
 import Foundation
 import CoreLocation
 
-class LocationManager: NSObject, ObservableObject {
+class LocationManager: NSObject {
     private let locationManager = CLLocationManager()
     
-    @Published var location: CLLocationCoordinate2D?
-    @Published var isLocationAuthorised: Bool = false
+    var isLocationAuthorised: Bool = false
+    
+    var delegate: LocationManagerProtocol?
     
     override init() {
         super.init()
@@ -31,15 +32,17 @@ extension LocationManager: CLLocationManagerDelegate {
         switch manager.authorizationStatus {
         case .notDetermined, .restricted, .denied:
             self.isLocationAuthorised = false
+            self.delegate?.didUpdateLocation(location: nil)
         case .authorizedWhenInUse, .authorizedAlways:
             self.isLocationAuthorised = true
+            requestLocation()
         @unknown default:
             self.isLocationAuthorised = false
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        self.location = locations.first?.coordinate
+        self.delegate?.didUpdateLocation(location: locations.first?.coordinate)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

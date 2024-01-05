@@ -8,30 +8,31 @@
 import SwiftUI
 
 struct WeatherView: View {
-    @EnvironmentObject var networkManager: NetworkManager
-    @EnvironmentObject var viewModel: WeatherViewModel
-    @StateObject var locationManager = LocationManager()
+    @StateObject var viewModel = WeatherViewModel()
     
     var body: some View {
-        VStack {
-            if networkManager.isNetworkAvailble && locationManager.isLocationAuthorised {
-                // TODO: Call weather API
-                let apiSuccess = true
-                if apiSuccess {
+        ZStack {
+            VStack {
+                if let todayWeather = viewModel.todaysWeather, let forcast = viewModel.forcastWeather {
                     List {
-                        guard let todayWeather = viewModel.todayWeather, let forcast = viewModel.forcastWeather else {
-                                ErrorView(errorType: .apiError)
-                        }
-                        TodayWeatherView()
-                        ForcastView()
+                        TodayWeatherView(todayWeather: todayWeather, showLocationIco: true)
+                        ForcastView(forcastList: forcast.list ?? [])
                     }
-                } else {
-                    ErrorView(errorType: .apiError)
+                } else if viewModel.didErrorOccured {
+                    ErrorView(errorType: viewModel.errotType)
                 }
-            } else if networkManager.isNetworkAvailble && !locationManager.isLocationAuthorised {
-                ErrorView(errorType: .noLocationAccess)
-            } else if !networkManager.isNetworkAvailble {
-                ErrorView(errorType: .networkError)
+            }
+            .refreshable {
+                viewModel.fetchWeather()
+            }
+            .onAppear {
+                if viewModel.firstTimeLaunch || viewModel.todaysWeather == nil {
+                    viewModel.firstTimeLaunch = false
+                    viewModel.fetchWeather()
+                }
+            }
+            if viewModel.isLoading {
+                ActivityIndicatorView()
             }
         }
     }
@@ -40,7 +41,5 @@ struct WeatherView: View {
 struct WeatherView_Previews: PreviewProvider {
     static var previews: some View {
         WeatherView()
-            .environmentObject(NetworkManager())
-            .environmentObject(WeatherViewModel())
     }
 }

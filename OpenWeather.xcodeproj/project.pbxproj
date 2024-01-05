@@ -22,6 +22,9 @@
 		3F9333922B3F099C00AC7FA2 /* TemperatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9333912B3F099C00AC7FA2 /* TemperatureView.swift */; };
 		3FBABED42B3EA42E0023320C /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBABED32B3EA42E0023320C /* WeatherView.swift */; };
 		3FBABED62B3EA4500023320C /* PicALocView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBABED52B3EA4500023320C /* PicALocView.swift */; };
+		945A2F172B44314B000C50A7 /* PicALocViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945A2F162B44314B000C50A7 /* PicALocViewModel.swift */; };
+		945A2F192B4431CD000C50A7 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945A2F182B4431CD000C50A7 /* Common.swift */; };
+		946EE2772B46DB720065E0C7 /* WeatherApiCaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946EE2762B46DB720065E0C7 /* WeatherApiCaller.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +45,9 @@
 		3F9333912B3F099C00AC7FA2 /* TemperatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureView.swift; sourceTree = "<group>"; };
 		3FBABED32B3EA42E0023320C /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		3FBABED52B3EA4500023320C /* PicALocView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicALocView.swift; sourceTree = "<group>"; };
+		945A2F162B44314B000C50A7 /* PicALocViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicALocViewModel.swift; sourceTree = "<group>"; };
+		945A2F182B4431CD000C50A7 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
+		946EE2762B46DB720065E0C7 /* WeatherApiCaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApiCaller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				3F5D85A12B4074B000B60886 /* WeatherViewModel.swift */,
+				945A2F162B44314B000C50A7 /* PicALocViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -113,6 +120,8 @@
 		3F6365742B3FD880008833F3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				945A2F182B4431CD000C50A7 /* Common.swift */,
+				946EE2762B46DB720065E0C7 /* WeatherApiCaller.swift */,
 				3F6365752B3FD8A6008833F3 /* NetworkManager.swift */,
 				3F6365792B40117E008833F3 /* LocationManager.swift */,
 			);
@@ -219,10 +228,13 @@
 				3F5D85A42B407A4100B60886 /* WeatherModel.swift in Sources */,
 				3F6365762B3FD8A6008833F3 /* NetworkManager.swift in Sources */,
 				3F63657C2B4021C9008833F3 /* ActivityIndicatorView.swift in Sources */,
+				945A2F172B44314B000C50A7 /* PicALocViewModel.swift in Sources */,
 				3F1EF8702B3E9B7B00908BFC /* OpenWeatherApp.swift in Sources */,
 				3F9333922B3F099C00AC7FA2 /* TemperatureView.swift in Sources */,
 				3F6365782B3FF450008833F3 /* ErrorView.swift in Sources */,
 				3F5D85A22B4074B000B60886 /* WeatherViewModel.swift in Sources */,
+				945A2F192B4431CD000C50A7 /* Common.swift in Sources */,
+				946EE2772B46DB720065E0C7 /* WeatherApiCaller.swift in Sources */,
 				3F9333902B3EF7C500AC7FA2 /* ForcastView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -355,7 +367,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"OpenWeather/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = OpenWeather/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -376,7 +388,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"OpenWeather/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = OpenWeather/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

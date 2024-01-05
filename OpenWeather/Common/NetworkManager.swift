@@ -21,8 +21,14 @@ class NetworkManager {
         networkMonitor.start(queue: networkMonitorQueue)
     }
     
-    static func getWeatherData(from: URL) {
-        
+    /// Method to call API using url session
+    func getWeatherData(from url: URL) async -> Data? {
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return data
+        } catch {
+            return nil // As we are not going to show generic error we don't care what error occured
+        }
     }
     
 }

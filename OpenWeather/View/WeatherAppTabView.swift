@@ -11,31 +11,24 @@ struct WeatherAppTabView: View {
     @State var reload = false
     var body: some View {
         NavigationView {
-            ZStack {
-                TabView {
-                    WeatherView()
-                        .tabItem {
-                            Label("Weather", systemImage: "cloud.sun.fill")
-                        }
-                    
-                    PicALocView()
-                        .tabItem {
-                            Label("Search", systemImage: "location.fill")
+            TabView {
+                WeatherView()
+                    .tabItem {
+                        Label("Weather", systemImage: "cloud.sun.fill")
                     }
+                
+                PicALocView()
+                    .tabItem {
+                        Label("Search", systemImage: "location.fill")
                 }
-                .navigationTitle("Open Weather")
-//                .toolbar(content: {
-//                    Image(systemName: "arrow.clockwise.circle.fill")
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                        .frame(width: 25, height: 25, alignment: .center)
-//                        .foregroundColor(.accentColor)
-////                        .rotationEffect(.degrees(180), anchor: .center)
-//                        .onTapGesture {
-//                            self.reload.toggle()
-//                        }
-//                })
             }
+            .navigationTitle("Open Weather")
+        }
+        .onAppear {
+            // code to fix the transperrency issue in swift UI tab bar
+            let tabBarAppearence = UITabBarAppearance()
+            tabBarAppearence.configureWithOpaqueBackground()
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearence
         }
     }
 }
@@ -43,6 +36,5 @@ struct WeatherAppTabView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         WeatherAppTabView()
-            .environmentObject(NetworkManager())
     }
 }
