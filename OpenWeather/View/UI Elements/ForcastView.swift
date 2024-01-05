@@ -16,16 +16,18 @@ struct ForcastView: View {
             
             Text(OpenWeatherConstants.forcastMsg)
                 .font(.title2)
-                .fontWeight(.medium)
+                .fontWeight(.semibold)
             
             ForEach(forcastList) { perDayForcast in
                 
                 HStack(spacing: 25) {
                     VStack(alignment: .leading, spacing: 5) {
                         Text(getDateFrom(time: perDayForcast.dt))
-                            .font(.title3)
+                            .font(.system(size: 20))
+                            .fontWeight(.medium)
+                        
                         Text(perDayForcast.weather.first?.description.capitalizeFirstLetter ?? "")
-                            .font(.subheadline)
+                            .font(.system(size: 14))
                     }
                     Spacer()
                     
