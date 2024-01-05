@@ -120,10 +120,10 @@
 		3F6365742B3FD880008833F3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				945A2F182B4431CD000C50A7 /* Common.swift */,
+				946EE2762B46DB720065E0C7 /* WeatherApiCaller.swift */,
 				3F6365752B3FD8A6008833F3 /* NetworkManager.swift */,
 				3F6365792B40117E008833F3 /* LocationManager.swift */,
-				946EE2762B46DB720065E0C7 /* WeatherApiCaller.swift */,
-				945A2F182B4431CD000C50A7 /* Common.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";

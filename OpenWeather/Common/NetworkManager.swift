@@ -21,6 +21,7 @@ class NetworkManager {
         networkMonitor.start(queue: networkMonitorQueue)
     }
     
+    /// Method to call API using url session
     func getWeatherData(from url: URL) async -> Data? {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)

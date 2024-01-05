@@ -29,7 +29,7 @@ struct TodayWeatherView: View {
                 TemperatureView(style: TemperatureViewStyle(fontStyle: .system(size: 60), weatherIcoScale: 2),
                                 temperture: "\(temperature.temp.roundToInt)°C",
                                 weatherId: weather.first?.id ?? 0)
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 8))
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 3))
                 
                 HStack {
                     Text("Feels like \( temperature.temp.roundToInt )°C")

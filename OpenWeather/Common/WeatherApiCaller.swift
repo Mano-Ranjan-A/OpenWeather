@@ -2,17 +2,16 @@
 //  WeatherAPICaller.swift
 //  OpenWeather
 //
-//  Created by cognizant on 04/01/24.
+//  Created by Mano on 04/01/24.
 //
 
 import Foundation
 
 class WeatherApiCaller {
     
-    
     /// Method to call the weather API and always return true to indicate api call ended
     ///  - returns (didErrorOccur, errorType, todayWeather, forcastWeather)
-    static func callApiWith(_ weatherUrl: URL, _ forcastUrl: URL, using networkManager: NetworkManager) async -> (Bool, ErrorType, TodayWeatherModel?, ForcastWeatherModel?) {
+    func callApiWith(_ weatherUrl: URL, and forcastUrl: URL, using networkManager: NetworkManager) async -> (Bool, ErrorType, TodayWeatherModel?, ForcastWeatherModel?) {
         
         guard networkManager.isNetworkAvailble else {
             return (true, .networkError, nil, nil)
@@ -38,8 +37,8 @@ class WeatherApiCaller {
         return (false, .noError, weather, filterForcastData(forcastData: forcast))
     }
     
-    /// Method to filter the 3 hour weather data and return forcast model containind only one forcast for each day
-    private static func filterForcastData(forcastData: ForcastWeatherModel) -> ForcastWeatherModel? {
+    /// Method to filter out the 3 hour weather data and return forcast model containind only one forcast for each day
+    private func filterForcastData(forcastData: ForcastWeatherModel) -> ForcastWeatherModel? {
         guard var forcastList = forcastData.list else { return nil }
         var filteredForcastList = [ForcastList]()
         
@@ -54,8 +53,8 @@ class WeatherApiCaller {
         }
         
         return ForcastWeatherModel(list: filteredForcastList,
-                                                  city: forcastData.city,
-                                                  cod: forcastData.cod,
-                                                  message: forcastData.message)
+                                   city: forcastData.city,
+                                   cod: forcastData.cod,
+                                   message: forcastData.message)
     }
 }

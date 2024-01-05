@@ -19,7 +19,7 @@ struct TemperatureViewStyle {
         case 300..<325:
             return ("cloud.drizzle.fill", .blue)
         case 500..<535:
-            return ("cloud.rain.fill", .gray)
+            return ("cloud.rain.fill", .blue)
         case 600..<625:
             return ("snow", .cyan)
         case 700..<800:

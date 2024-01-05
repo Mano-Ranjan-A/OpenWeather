@@ -22,9 +22,10 @@ class WeatherViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errotType: ErrorType = .noError
     
-    var firstTimeLaunch = true
-    let networkManager = NetworkManager()
+    private let networkManager = NetworkManager()
     private let locationManager = LocationManager()
+    
+    var firstTimeLaunch = true
     
     init() {
         locationManager.delegate = self
@@ -50,7 +51,7 @@ class WeatherViewModel: ObservableObject {
         let forcastUrlString = OpenWeatherConstants.openWeatherBaseURLString + "forecast?lat=\(latitude)&lon=\(longitude)&appid=\(OpenWeatherConstants.apiKey)&units=metric"
         guard let weatherUrl = URL(string: weatherUrlString), let forcastUrl = URL(string: forcastUrlString) else { return }
         
-        (didErrorOccured, errotType, todaysWeather, forcastWeather) = await WeatherApiCaller.callApiWith(weatherUrl, forcastUrl, using: networkManager)
+        (didErrorOccured, errotType, todaysWeather, forcastWeather) = await WeatherApiCaller().callApiWith(weatherUrl, and: forcastUrl, using: networkManager)
         isLoading = false
     }
 }

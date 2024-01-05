@@ -17,7 +17,7 @@ class PicALocViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errotType: ErrorType = .noError
     
-    let networkManager = NetworkManager()
+    private let networkManager = NetworkManager()
     
     /// Method to fetch weather data of specified city
     func fetchWeatherDataFor(city: String) async {
@@ -26,7 +26,7 @@ class PicALocViewModel: ObservableObject {
         guard let weatherUrl = URL(string: weatherUrlString), let forcastUrl = URL(string: forcastUrlString) else { return }
         
         isLoading = true
-        (didErrorOccured, errotType, todaysWeather, forcastWeather) = await WeatherApiCaller.callApiWith(weatherUrl, forcastUrl, using : networkManager)
+        (didErrorOccured, errotType, todaysWeather, forcastWeather) = await WeatherApiCaller().callApiWith(weatherUrl, and: forcastUrl, using: networkManager)
         isLoading = false
         showSearchMessage = false
     }

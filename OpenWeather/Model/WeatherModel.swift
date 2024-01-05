@@ -41,10 +41,12 @@ struct ForcastWeatherModel: Codable {
         self.list = try? container.decodeIfPresent([ForcastList].self, forKey: .list)
         self.city = try? container.decodeIfPresent(City.self, forKey: .city)
         self.cod = try? container.decodeIfPresent(String.self, forKey: .cod)
+        
+        /// Trying to decode in both Int and  String as API is returning int  if no error and string when error occured
         if let msg = try? container.decodeIfPresent(Int.self, forKey: .message) {
             self.message = String(msg)
         } else {
-            self.message = try container.decodeIfPresent(String.self, forKey: .message)
+            self.message = try? container.decodeIfPresent(String.self, forKey: .message)
         }
     }
     

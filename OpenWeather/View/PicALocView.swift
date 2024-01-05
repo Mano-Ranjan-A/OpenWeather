@@ -20,6 +20,7 @@ struct PicALocView: View {
                     .textFieldStyle(.roundedBorder)
                     .padding()
                     .tint(.accentColor)
+                    .autocorrectionDisabled()
                     .onAppear {
                         UITextField.appearance().clearButtonMode = .whileEditing
                     }
